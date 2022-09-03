@@ -10,11 +10,19 @@ const funcoes = {
         baseConsulta[lembrete.contador] = lembrete
     },
     ObservacaoCriada: (observacao) => {
+        if( !(observacao.lembreteId in baseConsulta) )
+            return console.log('Não tem lembrete seu animal')
         const observacoes = baseConsulta[observacao.lembreteId]['observacoes'] || []
         observacoes.push(observacao)
+
+        
         baseConsulta[observacao.lembreteId]['observacoes'] = observacoes
+    },
+    ObservacaoAtualizada: (observacao) => {
+        const observacoes = baseConsulta[observacao.lembreteId]['Observacoes']
+        const indice = observacoes.findIndex(o => o.id === observacao.id)
+        observacoes[indice] = observacao
     }
-    
 }
 
 app.get('/lembretes', (req, res) => {

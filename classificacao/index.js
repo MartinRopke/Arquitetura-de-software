@@ -14,7 +14,8 @@ function observacaoCriada(observacao){
 }
 
 app.post('/eventos', (request , response) => {
-    funcoes[request.body.tipo](request.body.dados)
+    if(request.body.tipo in funcoes)
+        funcoes[request.body.tipo](request.body.dados)
     response.status(200).send({msg:'ok'})
 })
 
