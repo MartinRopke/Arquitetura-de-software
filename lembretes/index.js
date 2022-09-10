@@ -10,20 +10,24 @@ app.get('/lembretes', (req, res) => {
     res.send(lembretes)
 })
 
-app.post('/lembretes', async (req, res) => {
+app.post('/lembretes', (req, res) => {
     contador ++
     const {texto} = req.body
     lembretes[contador] = {
         contador, texto
     }
-    await axios.post("http://localhost:10000/eventos", {
+    axios.post("http://localhost:10000/eventos", {
         tipo: "LembreteCriado",
         dados: {
             contador,
             texto,
         },
     })
-    res.status(200).send(lembretes[contador])
+    .then(() => res.status(200).send(lembretes[contador]))
+    .catch(error => {
+        console.log('Error: '+ error)
+        res.status(502).send('Error: '+ error)
+    })
 })
 
 app.post("/eventos", (req, res) => {

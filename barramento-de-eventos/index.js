@@ -2,21 +2,26 @@ const express = require('express')
 const bodyParser = require('body-parser')
 //para enviar eventos para os demais microsserviços
 const axios = require('axios')
+const { request } = require('express')
 
 const app = express()
 app.use(bodyParser.json())
 
+const eventos = []
+
+const portasMicrosservicos = [4000, 5000, 6000, 7000]
+
 app.post('/eventos', (req, res) => {
     const evento = req.body
-    //envia o evento para o microsserviço de lembretes
-    axios.post('http://localhost:4000/eventos', evento)
-    //envia o evento para o microsserviço de obervações
-    axios.post('http://localhost:5000/eventos', evento)
-    //envia o evento para o microsserviço de consulta
-    axios.post('http://localhost:6000/eventos', evento)
-    //envia o evento para o microsserviço de classificacao
-    axios.post('http://localhost:7000/eventos', evento)
+    eventos.push(evento)
+     //envia o evento para o microsserviço
+     for(let porta of portasMicrosservicos)
+        axios.post(`http://localhost:${porta}/eventos`, evento).catch(error => console.log('Error: ' + error))
     res.status(200).send({ msg: "ok"})
+})
+
+app.get('/eventos', (request, response) => {
+    response.send(eventos)
 })
 
 app.listen(10000, () => {
