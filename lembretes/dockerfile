@@ -1,0 +1,15 @@
+#alpine: imagem Linux "pequena"
+FROM node:alpine
+
+# um diretório no sistema de arquivos de contêiner para os comandos a seguir
+WORKDIR /app
+
+#copia todo o conteúdo local para a imagem
+COPY . .
+
+#instala as dependências
+RUN npm install
+
+#executa quando o contêiner entrar em execução
+CMD ["npm", "start"]
+
