@@ -24,4 +24,9 @@ spec:
         spec:
             containers:
                 - name: lembretes
-                  image: martinropke/lembretes:0.0.1
+                  image: martinropke/lembretes
+                  imagePullPolicy: Never
+                  resources:
+                   limits:
+                    memory: 256Mi
+                    cpu: "1"
